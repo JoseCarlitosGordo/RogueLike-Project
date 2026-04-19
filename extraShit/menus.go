@@ -1,16 +1,16 @@
 package extraShit
 
 import (
+	"image/color"
+
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 )
 
-type Buttons struct {
-	button widget.Clickable
-	theme  *material.Theme
+func NewButton(newButton *widget.Clickable, theme *material.Theme, text string) material.ButtonStyle {
+	return material.Button(theme, newButton, text)
 }
 
-func NewButton (newButton widget.Clickable, theme *material.Theme) *widget.Clickable
-{
-	
+func NewText(theme *material.Theme, text string, color color.NRGBA) material.LabelStyle {
+	return material.H1(theme, text)
 }
