@@ -10,10 +10,12 @@ import (
 	"gioui.org/widget/material"
 )
 
+// mainMenu := Extras.MainMenu{active: true, theme: material.NewTheme(), title: GUIElement{text: "Hello!", style: theme}, PlayBtn: Button{{GUIElement{text: "Play", style: theme}, clickable: widget.Clickable}}}
 func main() {
 	go func() {
 		MainMenuWindow := new(app.Window)
 		err := run(MainMenuWindow)
+
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -28,6 +30,7 @@ func run(window *app.Window) error {
 		Main_Menu    = "Main Menu"
 		Options_Menu = "Options"
 		Game_Loop    = "Game Loop"
+		Pause_Menu   = "Pause Menu"
 	)
 	currentMenu := Main_Menu
 	theme := material.NewTheme()
