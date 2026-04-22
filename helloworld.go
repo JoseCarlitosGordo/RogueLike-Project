@@ -7,7 +7,7 @@ import (
 
 	"gioui.org/app"
 	"gioui.org/op"
-	"gioui.org/widget/material"
+	//"gioui.org/widget/material"
 )
 
 // mainMenu := Extras.MainMenu{active: true, theme: material.NewTheme(), title: GUIElement{text: "Hello!", style: theme}, PlayBtn: Button{{GUIElement{text: "Play", style: theme}, clickable: widget.Clickable}}}
@@ -32,9 +32,11 @@ func run(window *app.Window) error {
 		Game_Loop    = "Game Loop"
 		Pause_Menu   = "Pause Menu"
 	)
-	currentMenu := Main_Menu
-	theme := material.NewTheme()
-	elementList := []Extras.GUIElement{}
+	mainMenu := Extras.CreateMainMenu()
+	// options := Extras.CreateOptions()
+	// gameLoop := Extras.BeginGame()
+	// pauseMenu := Extras.PauseGame()
+	//elementList := []Extras.GUIElement{}
 
 	var ops op.Ops
 
@@ -46,14 +48,18 @@ func run(window *app.Window) error {
 		case app.FrameEvent:
 			// This graphics context is used for managing the rendering state.
 			gtx := app.NewContext(&ops, e)
-			switch currentMenu {
-			case Main_Menu:
-				Extras.DisplayMainMenu(&gtx, theme, elementList)
-			case Options_Menu:
 
-			case Game_Loop:
-
+			if mainMenu.Active {
+				mainMenu.Draw(gtx)
 			}
+			// switch currentMenu {
+			// case Main_Menu:
+			// 	Extras.DisplayMainMenu(&gtx, theme, elementList)
+			// case Options_Menu:
+
+			// case Game_Loop:
+
+			//}
 
 			// // Define an large label with an appropriate text:
 			// title := material.H1(theme, "Hello, Gio")
