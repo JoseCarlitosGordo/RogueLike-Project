@@ -4,6 +4,7 @@ import (
 	"image/color"
 
 	"gioui.org/layout"
+	"gioui.org/op/paint"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 )
@@ -16,8 +17,8 @@ func NewButton(newButton *widget.Clickable, theme *material.Theme, text string) 
 	return material.Button(theme, newButton, text)
 }
 
-func NewText(theme *material.Theme, text string, color color.NRGBA) material.LabelStyle {
-	newText := material.H1(theme, text)
+func NewH4(theme *material.Theme, text string, color color.NRGBA) material.LabelStyle {
+	newText := material.H4(theme, text)
 	newText.Color = color
 	return newText
 }
@@ -40,7 +41,11 @@ func CreateMainMenu() *MainMenu {
 
 }
 func (m *MainMenu) Draw(gtx layout.Context) layout.Dimensions {
-	title := NewText(m.title.style, m.title.text, color.NRGBA{R: 127, G: 0, B: 0, A: 255})
+	title := NewH4(m.title.style, m.title.text, color.NRGBA{R: 127, G: 0, B: 0, A: 255})
+	bgColor := color.NRGBA{R: 0, G: 0, B: 0, A: 255} // Light red
+	playBtn := NewButton(&m.PlayBtn.clickable, m.PlayBtn.style, "Play")
+	// Fill the background
+	paint.Fill(gtx.Ops, bgColor)
 
 	// // Define an large label with an appropriate text:
 	// title := material.H1(theme, "Hello, Gio")
@@ -57,10 +62,18 @@ func (m *MainMenu) Draw(gtx layout.Context) layout.Dimensions {
 	// PlayBtn.Layout(gtx)
 	// Pass the drawing operations to the GPU.
 	return layout.Flex{
-		Axis: layout.Vertical,
+		Axis:      layout.Vertical,
+		Alignment: layout.Middle,
+		Spacing:   layout.SpaceBetween,
 	}.Layout(gtx,
 		layout.Rigid(title.Layout),
-		//layout.Rigid(material.CheckBox(th, &isChecked, checkboxLabel).Layout),
+
+		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+			// Set both Min and Max to force an exact width
+			gtx.Constraints.Min.X = gtx.Dp(200)
+			gtx.Constraints.Max.X = gtx.Dp(200)
+			return playBtn.Layout(gtx)
+		}),
 	)
 
 }
