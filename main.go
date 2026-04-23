@@ -12,6 +12,7 @@ import (
 
 // mainMenu := Extras.MainMenu{active: true, theme: material.NewTheme(), title: GUIElement{text: "Hello!", style: theme}, PlayBtn: Button{{GUIElement{text: "Play", style: theme}, clickable: widget.Clickable}}}
 func main() {
+	//app logic sits in a goroutine
 	go func() {
 		MainMenuWindow := new(app.Window)
 		err := run(MainMenuWindow)
@@ -21,6 +22,7 @@ func main() {
 		}
 		os.Exit(0)
 	}()
+	//Initialises application for certain OS's like MACOS and Android devices
 	app.Main()
 }
 
@@ -50,7 +52,7 @@ func run(window *app.Window) error {
 			gtx := app.NewContext(&ops, e)
 
 			if mainMenu.Active {
-				mainMenu.Draw(gtx)
+				mainMenu.Draw(gtx, window)
 			}
 			// switch currentMenu {
 			// case Main_Menu:
@@ -61,20 +63,6 @@ func run(window *app.Window) error {
 
 			//}
 
-			// // Define an large label with an appropriate text:
-			// title := material.H1(theme, "Hello, Gio")
-			// // Change the color of the label.
-			// maroon := color.NRGBA{R: 127, G: 0, B: 0, A: 255}
-			// title.Color = maroon
-			// // Change the position of the label.
-			// title.Alignment = text.Middle
-
-			// // Draw the label to the graphics context.
-			// title.Layout(gtx)
-
-			// PlayBtn := extraShit.NewButton(&mainMenuButton, theme, "Play")
-			// PlayBtn.Layout(gtx)
-			// Pass the drawing operations to the GPU.
 			e.Frame(gtx.Ops)
 		}
 	}
