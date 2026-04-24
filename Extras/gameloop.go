@@ -11,12 +11,21 @@ type Choice struct {
 	RightBtn Button
 }
 type Combat struct {
-	Active bool
+	Active    bool
+	EnemyList []Enemy
 }
 type BossEncounter struct {
 	Combat
 }
+type RandomEncounter struct {
+	EncounterText string
+	Choices       []Button
+}
 
 func (g *Choice) Draw(gtx layout.Context, window *app.Window) {
+
+}
+
+func (g *Combat) Draw(gtx layout.Context, window *app.Window) {
 
 }
