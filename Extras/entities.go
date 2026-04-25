@@ -9,9 +9,7 @@ type Entity struct {
 	HP          int
 	DefenceStat int
 	Speed       int //higher speed stats mean that entity has turns earlier
-	DodgeChance int
 	Skills      []Skill
-	Exp         int
 }
 
 type Weapon struct {
@@ -22,9 +20,42 @@ type Weapon struct {
 type Enemy struct {
 	Entity
 	Damage int
+	Level  int
 }
+
+type Boss struct {
+	Enemy
+}
+
+type Thief struct {
+	Enemy
+	NumberOfCoinsStolenOnHit int
+
+	SpeedMultiplier float32
+}
+
+type Brute struct {
+	Enemy
+	HealthMultiplier float32
+	DamageMultiplier float32
+}
+
+type Thug struct {
+	Enemy
+}
+
+func CreateThief(newHP int, newDefenceStat int, newSpeed int, skillList []Skill, level int, DamageValue int, CoinsStolenOnHit int, newSpeedMultiplier float32) *Thief {
+	return &Thief{Enemy: Enemy{Entity: Entity{HP: newHP, DefenceStat: newDefenceStat, Skills: skillList}, Damage: DamageValue, Level: level}, NumberOfCoinsStolenOnHit: CoinsStolenOnHit, SpeedMultiplier: newSpeedMultiplier}
+}
+
+func CreateBrute(newHP int, newDefenceStat int, newSpeed int, skillList []Skill, level int, DamageValue int, newHealthMultiplier float32, newDamageMultiplier float32) *Brute {
+	return &Brute{Enemy: Enemy{Entity: Entity{HP: newHP, DefenceStat: newDefenceStat, Skills: skillList}, Damage: DamageValue, Level: level}, DamageMultiplier: newDamageMultiplier, HealthMultiplier: newHealthMultiplier}
+}
+
 type Player struct {
 	Entity
-	Energy int
-	Weapon Weapon
+	MaxEnergy  int
+	Energy     int
+	MoneyCount int
+	Weapon     Weapon
 }

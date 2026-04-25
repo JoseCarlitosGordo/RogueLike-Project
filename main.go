@@ -10,6 +10,9 @@ import (
 	//"gioui.org/widget/material"
 )
 
+var MainMenuState *Extras.MainMenu = Extras.CreateMainMenu()
+var GameLoopState *Extras.GameState = &Extras.GameState{Active: false, IsNewGame: true}
+
 // mainMenu := Extras.MainMenu{active: true, theme: material.NewTheme(), title: GUIElement{text: "Hello!", style: theme}, PlayBtn: Button{{GUIElement{text: "Play", style: theme}, clickable: widget.Clickable}}}
 func main() {
 	//app logic sits in a goroutine
@@ -34,7 +37,6 @@ func run(window *app.Window) error {
 		Game_Loop    = "Game Loop"
 		Pause_Menu   = "Pause Menu"
 	)
-	mainMenu := Extras.CreateMainMenu()
 	// options := Extras.CreateOptions()
 	// gameLoop := Extras.BeginGame()
 	// pauseMenu := Extras.PauseGame()
@@ -51,8 +53,12 @@ func run(window *app.Window) error {
 			// This graphics context is used for managing the rendering state.
 			gtx := app.NewContext(&ops, e)
 
-			if mainMenu.Active {
-				mainMenu.Draw(gtx, window)
+			if MainMenuState.Active {
+				MainMenuState.Draw(gtx, window, GameLoopState)
+			}
+
+			if GameLoopState.Active {
+
 			}
 			// switch currentMenu {
 			// case Main_Menu:

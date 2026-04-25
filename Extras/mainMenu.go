@@ -37,10 +37,10 @@ type MainMenu struct {
 
 func CreateMainMenu() *MainMenu {
 	newTheme := material.NewTheme()
-	return &MainMenu{Active: true, title: CreateGUIElement("Working title for Roguelike", newTheme), PlayBtn: CreateButton("Play", newTheme), OptionsBtn: CreateButton("Options", newTheme), QuitBtn: CreateButton("Quit", newTheme)}
+	return &MainMenu{Active: true, title: CreateGUIElement("Working title for Roguelike", newTheme), PlayBtn: CreateButton("New Game", newTheme), OptionsBtn: CreateButton("Options", newTheme), QuitBtn: CreateButton("Quit", newTheme)}
 
 }
-func (m *MainMenu) Draw(gtx layout.Context, window *app.Window) layout.Dimensions {
+func (m *MainMenu) Draw(gtx layout.Context, window *app.Window, gameLoopState *GameState) layout.Dimensions {
 	title := NewH4(m.title.style, m.title.text, color.NRGBA{R: 127, G: 0, B: 0, A: 255}, text.Middle)
 	bgColor := color.NRGBA{R: 0, G: 0, B: 0, A: 255} // black color
 	playBtn := NewButton(&m.PlayBtn.clickable, m.PlayBtn.style, m.PlayBtn.text)
@@ -49,7 +49,12 @@ func (m *MainMenu) Draw(gtx layout.Context, window *app.Window) layout.Dimension
 	optionsBtn := NewButton(&m.OptionsBtn.clickable, m.OptionsBtn.style, m.OptionsBtn.text)
 	quitBtn := NewButton(&m.QuitBtn.clickable, m.QuitBtn.style, m.QuitBtn.text)
 	if playBtn.Button.Clicked(gtx) {
-		//
+		m.Active = false
+
+		if gameLoopState.IsNewGame {
+			gameLoopState.BeginGame()
+		}
+		gameLoopState.Active = true
 
 	}
 
