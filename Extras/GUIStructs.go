@@ -5,6 +5,7 @@ import (
 	"gioui.org/widget/material"
 )
 
+// logic for holding elements inside other structs
 type GUIElement struct {
 	//elementType T
 	text  string
@@ -16,9 +17,9 @@ type Button struct {
 	clickable widget.Clickable
 }
 
-func CreateGUIElement(newText string, newStyle *material.Theme) *GUIElement {
+func CreateGUIElementStruct(newText string, newStyle *material.Theme) *GUIElement {
 	return &GUIElement{text: newText, style: newStyle}
 }
-func CreateButton(newText string, newStyle *material.Theme) *Button {
-	return &Button{GUIElement: *CreateGUIElement(newText, newStyle), clickable: widget.Clickable{}}
+func CreateButtonStruct(newText string, newStyle *material.Theme) *Button {
+	return &Button{GUIElement: *CreateGUIElementStruct(newText, newStyle), clickable: widget.Clickable{}}
 }

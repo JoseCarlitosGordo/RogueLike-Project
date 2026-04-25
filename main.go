@@ -11,7 +11,7 @@ import (
 )
 
 var MainMenuState *Extras.MainMenu = Extras.CreateMainMenu()
-var GameLoopState *Extras.GameState = &Extras.GameState{Active: false, IsNewGame: true}
+var GameLoopState *Extras.GameState = &Extras.GameState{Active: false, IsStartingNewGame: false}
 
 // mainMenu := Extras.MainMenu{active: true, theme: material.NewTheme(), title: GUIElement{text: "Hello!", style: theme}, PlayBtn: Button{{GUIElement{text: "Play", style: theme}, clickable: widget.Clickable}}}
 func main() {
@@ -57,17 +57,13 @@ func run(window *app.Window) error {
 				MainMenuState.Draw(gtx, window, GameLoopState)
 			}
 
-			if GameLoopState.Active {
-
+			if GameLoopState.IsStartingNewGame {
+				GameLoopState.BeginGame(gtx)
 			}
-			// switch currentMenu {
-			// case Main_Menu:
-			// 	Extras.DisplayMainMenu(&gtx, theme, elementList)
-			// case Options_Menu:
 
-			// case Game_Loop:
-
-			//}
+			if GameLoopState.Active {
+				GameLoopState.Draw(gtx)
+			}
 
 			e.Frame(gtx.Ops)
 		}
