@@ -58,11 +58,11 @@ func run(window *app.Window) error {
 			}
 
 			if GameLoopState.IsStartingNewGame {
-				GameLoopState.BeginGame(gtx)
+				GameLoopState.BeginGame(gtx, MainMenuState.Theme)
 			}
 
 			if GameLoopState.Active {
-				GameLoopState.Draw(gtx)
+				GameLoopState.Draw(gtx, MainMenuState.Theme)
 			}
 
 			e.Frame(gtx.Ops)

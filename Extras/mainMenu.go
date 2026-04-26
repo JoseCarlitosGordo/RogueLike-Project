@@ -24,12 +24,20 @@ func NewH4(theme *material.Theme, text string, color color.NRGBA, alignment text
 	return newText
 }
 
+func NewBody1(theme *material.Theme, text string, color color.NRGBA, alignment text.Alignment) material.LabelStyle {
+	newText := material.Body1(theme, text)
+	newText.Color = color
+	newText.Alignment = alignment
+	return newText
+}
+
 type Display interface {
 	draw()
 }
 
 type MainMenu struct {
 	Active     bool
+	Theme      *material.Theme
 	title      *GUIElement
 	PlayBtn    *Button //{GUIElement{text: "Play", style: theme}, clickable: widget.Clickable}
 	OptionsBtn *Button
@@ -38,7 +46,7 @@ type MainMenu struct {
 
 func CreateMainMenu() *MainMenu {
 	newTheme := material.NewTheme()
-	return &MainMenu{Active: true, title: CreateGUIElementStruct("Working title for Roguelike", newTheme), PlayBtn: CreateButtonStruct("New Game", newTheme), OptionsBtn: CreateButtonStruct("Options", newTheme), QuitBtn: CreateButtonStruct("Quit", newTheme)}
+	return &MainMenu{Active: true, Theme: newTheme, title: CreateGUIElementStruct("Working title for Roguelike", newTheme), PlayBtn: CreateButtonStruct("New Game", newTheme), OptionsBtn: CreateButtonStruct("Options", newTheme), QuitBtn: CreateButtonStruct("Quit", newTheme)}
 
 }
 func (m *MainMenu) Draw(gtx layout.Context, window *app.Window, gameLoopState *GameState) layout.Dimensions {
