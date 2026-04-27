@@ -14,7 +14,8 @@ type GUIElement struct {
 
 type Button struct {
 	GUIElement
-	clickable widget.Clickable
+	Consequence ChoiceConsequence
+	clickable   widget.Clickable
 }
 
 func CreateGUIElementStruct(newText string, newStyle *material.Theme) *GUIElement {

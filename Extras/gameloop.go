@@ -1,12 +1,10 @@
 package Extras
 
 import (
-	"image"
 	"image/color"
+	"math/rand/v2"
 
-	"gioui.org/app"
 	"gioui.org/layout"
-	"gioui.org/op/clip"
 	"gioui.org/op/paint"
 	"gioui.org/text"
 	"gioui.org/widget/material"
@@ -17,10 +15,16 @@ type GameComponent interface {
 }
 type Choice struct {
 	Active     bool
+	Repeatable bool
 	ChoiceText string
 	choices    []Button
 }
+
+type ChoiceConsequence struct {
+	ChoiceText string
+}
 type Combat struct {
+	ChoiceConsequence
 	Active    bool
 	EnemyList []Enemy
 }
@@ -28,26 +32,34 @@ type BossFight struct {
 	Combat
 }
 type RandomEncounter struct {
+	ChoiceConsequence
 	Active        bool
 	EncounterText string
-	Choices       []Button
+	Choices       Choice
 }
 
-func (g *Choice) Draw(gtx layout.Context, window *app.Window) {
+func (g *Choice) Draw(gtx layout.Context, th *material.Theme) layout.Dimensions {
+	for i := range g.choices {
+		btn := NewButton(&g.choices[i].clickable, g.choices[i].style, g.choices[i].text)
+		btn.Layout(gtx)
+
+	}
+	return layout.Flex{}.Layout(gtx)
 
 }
 
-func (g *Combat) Draw(gtx layout.Context, window *app.Window) {
+func (g *Combat) Draw(gtx layout.Context) {
 
 }
 
 type GameState struct {
 	Active bool
 
-	IsStartingNewGame bool
-	// Choice
-	// randomEncounters []RandomEncounter
-
+	IsStartingNewGame   bool
+	IsMakingAChoice     bool
+	RoundCount          int
+	CurrentChoice       []Choice
+	PotentialEncounters []RandomEncounter
 }
 
 var buttonData = CreateButtonStruct("Click here to proceed", material.NewTheme())
@@ -60,7 +72,6 @@ func (g *GameState) GiveMonologue(gtx layout.Context, MainTheme *material.Theme)
 		g.IsStartingNewGame = false
 		g.Active = true
 	}
-
 	return layout.Flex{
 		Axis:      layout.Vertical,
 		Alignment: layout.Middle,
@@ -73,35 +84,27 @@ func (g *GameState) GiveMonologue(gtx layout.Context, MainTheme *material.Theme)
 			return proceedBtn.Layout(gtx)
 		}),
 	)
-
 }
 func (g *GameState) BeginGame(gtx layout.Context, MainTheme *material.Theme) {
 	g.GiveMonologue(gtx, MainTheme)
 
 }
-
-// Test colors.
-var (
-	background = color.NRGBA{R: 0xC0, G: 0xC0, B: 0xC0, A: 0xFF}
-	red        = color.NRGBA{R: 0xC0, G: 0x40, B: 0x40, A: 0xFF}
-	green      = color.NRGBA{R: 0x40, G: 0xC0, B: 0x40, A: 0xFF}
-	blue       = color.NRGBA{R: 0x40, G: 0x40, B: 0xC0, A: 0xFF}
-)
-
-// ColorBox creates a widget with the specified dimensions and color.
-func ColorBox(gtx layout.Context, size image.Point, color color.NRGBA) layout.Dimensions {
-	defer clip.Rect{Max: size}.Push(gtx.Ops).Pop()
-	paint.ColorOp{Color: color}.Add(gtx.Ops)
-	paint.PaintOp{}.Add(gtx.Ops)
-	return layout.Dimensions{Size: size}
-}
 func (g *GameState) Draw(gtx layout.Context, MainTheme *material.Theme) layout.Dimensions {
-	title := NewH4(material.NewTheme(), "A new Adventure begins 2", color.NRGBA{R: 0, G: 0, B: 0, A: 255}, text.Middle)
+	title := NewH4(MainTheme, "Make a choice....", color.NRGBA{R: 0, G: 0, B: 0, A: 255}, text.Middle)
+	if g.IsMakingAChoice {
+		g.DisplayNavChoice(gtx, MainTheme)
 
+	}
 	return layout.Flex{
 		Axis:      layout.Vertical,
 		Alignment: layout.Middle,
 		Spacing:   layout.SpaceEvenly,
 	}.Layout(gtx, layout.Rigid(title.Layout))
+
+}
+
+func (g *GameState) DisplayNavChoice(gtx layout.Context, MainTheme *material.Theme) layout.Dimensions {
+	newChoice := NavChoices[rand.IntN(len(NavChoices))]
+	return newChoice.Draw(gtx, MainTheme)
 
 }
