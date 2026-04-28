@@ -1,6 +1,7 @@
 package Extras
 
 import (
+	"image"
 	"image/color"
 	"math/rand/v2"
 
@@ -38,17 +39,31 @@ type RandomEncounter struct {
 	Choices       Choice
 }
 
-func (g *Choice) Draw(gtx layout.Context, th *material.Theme) layout.Dimensions {
-	for i := range g.choices {
-		btn := NewButton(&g.choices[i].clickable, g.choices[i].style, g.choices[i].text)
-		btn.Layout(gtx)
+func (buttonChoice *Button) CreateAndRunConsequence() {
+	//TODO: If num is greater than 3, ChoiceConsequence is a combat encounter. Otherwise, it is a random encounter
 
-	}
-	return layout.Flex{}.Layout(gtx)
+}
+func (choice *Choice) Draw(gtx layout.Context, th *material.Theme) layout.Dimensions {
+	title := NewH4(th, "Make a choice....", color.NRGBA{R: 0, G: 0, B: 0, A: 255}, text.Middle)
+	physicalChoiceButtons := layout.List{Axis: layout.Horizontal}
+	buttonLayout := physicalChoiceButtons.Layout(gtx, len(choice.choices),
+		func(gtx layout.Context, i int) layout.Dimensions {
+			btn := NewButton(&choice.choices[i].clickable, choice.choices[i].style, choice.choices[i].text)
+			if btn.Button.Clicked(gtx) {
+				choice.choices[i].CreateAndRunConsequence()
+
+			}
+			return btn.Layout(gtx)
+		})
+	return layout.Flex{Alignment: layout.Middle}.Layout(gtx, layout.Rigid(title.Layout),
+		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+			return buttonLayout
+		}),
+	)
 
 }
 
-func (g *Combat) Draw(gtx layout.Context) {
+func (combat *Combat) Draw(gtx layout.Context) {
 
 }
 
@@ -90,16 +105,12 @@ func (g *GameState) BeginGame(gtx layout.Context, MainTheme *material.Theme) {
 
 }
 func (g *GameState) Draw(gtx layout.Context, MainTheme *material.Theme) layout.Dimensions {
-	title := NewH4(MainTheme, "Make a choice....", color.NRGBA{R: 0, G: 0, B: 0, A: 255}, text.Middle)
+	var layout_to_return layout.Dimensions = layout.Dimensions{Size: image.Point{}}
 	if g.IsMakingAChoice {
-		g.DisplayNavChoice(gtx, MainTheme)
-
+		layout_to_return = g.DisplayNavChoice(gtx, MainTheme)
 	}
-	return layout.Flex{
-		Axis:      layout.Vertical,
-		Alignment: layout.Middle,
-		Spacing:   layout.SpaceEvenly,
-	}.Layout(gtx, layout.Rigid(title.Layout))
+
+	return layout_to_return
 
 }
 

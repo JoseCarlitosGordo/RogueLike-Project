@@ -58,4 +58,5 @@ type Player struct {
 	Energy     int
 	MoneyCount int
 	Weapon     Weapon
+	LuckStat   int
 }
