@@ -11,34 +11,6 @@ import (
 	"gioui.org/widget/material"
 )
 
-type GameComponent interface {
-	CreateList()
-}
-type Choice struct {
-	Active     bool
-	Repeatable bool
-	ChoiceText string
-	choices    []Button
-}
-
-type ChoiceConsequence struct {
-	ChoiceText string
-}
-type Combat struct {
-	ChoiceConsequence
-	Active    bool
-	EnemyList []Enemy
-}
-type BossFight struct {
-	Combat
-}
-type RandomEncounter struct {
-	ChoiceConsequence
-	Active        bool
-	EncounterText string
-	Choices       Choice
-}
-
 func (buttonChoice *Button) CreateAndRunConsequence() {
 	//TODO: If num is greater than 3, ChoiceConsequence is a combat encounter. Otherwise, it is a random encounter
 

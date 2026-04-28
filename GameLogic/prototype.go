@@ -15,3 +15,7 @@ func main() {
 
 	}
 }
+
+func (combatEncounter *Combat) CommenceTurn() {
+
+}
