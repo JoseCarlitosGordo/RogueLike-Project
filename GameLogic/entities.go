@@ -1,4 +1,4 @@
-package Extras
+package GameLogic
 
 type EntityActions interface {
 	attack()
@@ -25,6 +25,7 @@ type Enemy struct {
 
 type Boss struct {
 	Enemy
+	HealthMultiplier int
 }
 
 type Thief struct {
@@ -33,15 +34,10 @@ type Thief struct {
 
 	SpeedMultiplier float32
 }
-
 type Brute struct {
 	Enemy
 	HealthMultiplier float32
 	DamageMultiplier float32
-}
-
-type Thug struct {
-	Enemy
 }
 
 func CreateThief(newHP int, newDefenceStat int, newSpeed int, skillList []Skill, level int, DamageValue int, CoinsStolenOnHit int, newSpeedMultiplier float32) *Thief {
