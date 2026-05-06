@@ -15,15 +15,39 @@ type Skill struct {
 	clickable   widget.Clickable
 	Description string
 	ManaCost    int
+	Name        string
 }
+
+func (s *Skill) Upgrade() {
+
+}
+
 type MarkSkill struct {
 	DamageMultiplier float32
 	Skill
 }
 
+type FlexSkill struct {
+	DamageAdded int
+	Skill
+}
+
+func (fs *FlexSkill) PerformSkill() {
+
+}
+
+func (ms *MarkSkill) PerformSkill() {
+
+}
 func CreateMarkSkill(newMultiplier float32) *MarkSkill {
 	newDescription := fmt.Sprintf("Target an enemy. When Targeted, they take %v percent more damage from any attack", (newMultiplier-1)*100)
-	return &MarkSkill{DamageMultiplier: newMultiplier, Skill: Skill{clickable: widget.Clickable{}, Description: newDescription, ManaCost: 2}}
+	return &MarkSkill{DamageMultiplier: newMultiplier, Skill: Skill{Name: "Mark", clickable: widget.Clickable{}, Description: newDescription, ManaCost: 1}}
+
+}
+
+func CreateFlexSkill(addedDamage int) *FlexSkill {
+	newDescription := fmt.Sprintf("Flex those Muscles! When played, add  %v damage to your attacks this turn! Effect ends at end of turn ", addedDamage)
+	return &FlexSkill{DamageAdded: addedDamage, Skill: Skill{Name: "Flex", clickable: widget.Clickable{}, Description: newDescription, ManaCost: 1}}
 
 }
 

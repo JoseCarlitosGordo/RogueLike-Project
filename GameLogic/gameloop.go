@@ -15,8 +15,10 @@ type Event interface {
 	RunEvent()
 }
 type Combat struct {
-	Active    bool
-	EnemyList []Enemy
+	Active      bool
+	EnemyList   []EntityInCombat
+	player      *Player
+	CurrentTurn EntityInCombat
 }
 type BossFight struct {
 	Combat
@@ -27,9 +29,32 @@ type RandomEncounter struct {
 	Choices       Choice
 }
 
-func (c *Combat) RunEvent() {
+func (rm *RandomEncounter) RunEvent() {
 
 }
+func (c *Combat) RunEvent() {
+	enemy_number := rand.IntN(3) + 2
+	for i := range enemy_number {
+		c.EnemyList = append(c.EnemyList, act1EnemyList[rand.IntN(len(act1EnemyList))])
+		i += 1
+	}
+
+	for c.player.HP > 0 && len(c.EnemyList) > 0 {
+
+		c.ProcessTurn(c.player)
+
+		for _, enemy := range c.EnemyList {
+			c.ProcessTurn(enemy)
+		}
+	}
+}
+func CreateEnemies(enemyList []EntityInCombat)
+
+func (c *Combat) ProcessTurn(entity EntityInCombat) {
+	entity.CommenceTurn()
+
+}
+
 func (g *GameState) RunSingleAct() {
 
 	g.RoundsLeftUntilBoss = 5
@@ -49,9 +74,9 @@ func (g *GameState) RunSingleAct() {
 		}
 		chosenChoice := currentChoice.choices[optionChosen-1]
 		if rand.IntN(101) < g.CombatChance {
-			chosenChoice.consequence = &Combat{EnemyList: []Enemy{}}
+			chosenChoice.consequence = &Combat{}
 		} else {
-
+			chosenChoice.consequence = &RandomEncounter{}
 		}
 		chosenChoice.consequence.RunEvent()
 
@@ -60,6 +85,6 @@ func (g *GameState) RunSingleAct() {
 	}
 
 }
-func (g *GameState) CommenceBossFight() {
+func (b *BossFight) RunEvent() {
 
 }

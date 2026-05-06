@@ -1,8 +1,5 @@
 package GameLogic
 
-type Event interface {
-	RunEvent()
-}
 type Choice struct {
 	Active     bool
 	Repeatable bool
@@ -14,19 +11,6 @@ type Option struct {
 	id          int
 	text        string
 	consequence Event
-}
-
-type Combat struct {
-	Active    bool
-	EnemyList []Enemy
-}
-type BossFight struct {
-	Combat
-}
-type RandomEncounter struct {
-	Active        bool
-	EncounterText string
-	Choices       Choice
 }
 
 var NavChoices []Choice = []Choice{
